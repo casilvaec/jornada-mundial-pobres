@@ -1,0 +1,146 @@
+/* Identidad cromática 2026: vino, naranja, crema y gris oscuro. */
+:root{--green:#a40a33;--cream:#fff7ed;--ink:#33302d;--muted:#68635f;--gold:#e98b17;--line:#eee1d8}
+.ribbon{background:#a50932;color:#fff8ed}
+.header{background:#fff7ed}
+.logo{color:#92102e}
+.official-mark{display:block;width:47px;height:47px;flex:none;background-image:url('./jornada-lema-2026.png');background-repeat:no-repeat;background-size:230px auto;background-position:right -18px top -34px;border-radius:3px}
+.official-mark{background-image:url('./logo-jornada-2026.png');background-size:contain;background-position:center;background-repeat:no-repeat;border-radius:0}
+.header .logo{color:#92102e}
+.top-button,.green-btn{background:#a40a33}
+.hero{background:#fff4e6;color:#86203a;position:relative}
+.hero:before{content:'';position:absolute;width:250px;height:250px;background:#a40a33;border-radius:0 0 95% 0;left:0;top:0;opacity:.055;pointer-events:none}
+.hero-copy .hero-quote{font:italic 16px/1.6 'Libre Baskerville',serif;letter-spacing:0;color:#a40a33;margin-bottom:30px}
+.hero h1{color:#90213c}
+.hero h1 em{color:#dd8013}
+.hero-copy>p:not(.eyebrow){color:#63554c}
+.hero .gold-btn{background:#a40a33;color:white}
+.hero .underline{border-color:#c77b45;color:#8c2338}
+.hero-art{height:500px;background:url('./jornada-lema-2026.png') center center/contain no-repeat}
+.hero-art svg,.hero-art .rings,.hero-art>span{display:none}
+.hero-art{display:none}
+.hero-motto{display:flex;align-items:center;justify-content:center;padding:36px 0 36px 22px;min-width:0}
+.motto-card{width:100%;max-width:480px;min-height:485px;padding:33px 32px 24px;background:#fff9f0;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:4px 65px 4px 4px;box-shadow:0 18px 45px #6e183011}
+.motto-card:before{content:'';position:absolute;left:0;top:0;width:93px;height:135px;background:#ac0d3c;border-radius:0 0 95% 0}
+.motto-card:after{content:'';position:absolute;right:-82px;bottom:-113px;width:230px;height:230px;background:#f49a19;border-radius:50%;opacity:.95}
+.motto-kicker{font:700 10px/1.5 'DM Sans',sans-serif;color:#9d1036;letter-spacing:.12em;text-align:center;margin:2px 0 23px;padding:0 25px;z-index:1}
+.motto-kicker b{color:#e18310}
+.motto-type{position:relative;z-index:1;text-align:center;color:#aa0738;display:flex;flex-direction:column;align-items:center;font-family:'Libre Baskerville',serif;font-weight:700;letter-spacing:-.055em;line-height:1.07}
+.motto-type>span{font-size:clamp(37px,3.5vw,54px)}
+.motto-type>small{font-size:29px;color:#36302d;letter-spacing:-.035em;margin:5px 0}
+.motto-type>div{white-space:nowrap;margin-top:4px}
+.motto-type>div small{font-size:25px;color:#36302d}
+.motto-type strong{font-size:clamp(38px,3.9vw,57px);color:#e58a12}
+.motto-verse{display:flex;align-items:center;gap:12px;width:61%;margin-top:15px;color:#b6083f;font-size:20px}
+.motto-verse span{height:2px;background:#ae103c;flex:1}
+.verse{color:#37312f;font:17px 'Libre Baskerville',serif;margin:3px 0 8px;z-index:1}
+.motto-logo{width:125px;height:130px;object-fit:contain;position:relative;z-index:1}
+.hero-bottom{color:#9c5a52;border-color:#a40a331f}
+.intro h2 em,.about h2 em,.directory h2 em{color:#cb6e11}
+.eyebrow{color:#a40a33}
+.counter strong,.card-type{color:#c66a10}
+.search,.select{background:#fffdf9}
+.filters{background:#fff9f2}
+.empty-seal{color:#ac1135}
+.note{line-height:1.8}
+.note a{color:#a40a33;text-decoration:underline;text-underline-offset:3px;margin-left:4px}
+.participate{background:#9f0b31}
+.participate h2 em{color:#ffbb5c}
+.participate li b{color:#ffc075}
+.participate p:not(.eyebrow){color:#fff0e7}
+.form-icon{color:#a40a33;background:#fff0da}
+footer{background:#780c2c}
+.footer-top .logo{color:#fff6ec}
+.footer-top>span,.footer-bottom{color:#f0c3c9}
+.platform-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;padding-top:10px}
+.card .platform-links a{padding:8px 10px;margin:0;background:#fff1e8;border:1px solid #f1d9c9;font-size:11px;border-radius:3px;color:#971033}
+[hidden]{display:none!important}
+@media(max-width:700px){
+  .hero-copy{padding-top:54px}
+  .hero-art{height:280px;background-size:contain;background-position:center}
+  .hero-motto{padding:6px 0 33px}
+  .motto-card{min-height:440px;max-width:420px;padding:36px 26px 22px}
+  .motto-kicker{font-size:9px;margin-bottom:21px}
+  .motto-type>span{font-size:clamp(39px,10vw,49px)}
+  .motto-type>div strong{font-size:clamp(40px,10vw,52px)}
+  .motto-type>small{font-size:27px}
+  .motto-logo{width:114px;height:115px}
+  .hero-copy .hero-quote{font-size:14px;margin-bottom:20px}
+  .hero-bottom{justify-content:space-between}
+  .official-mark{width:40px;height:40px;background-size:196px auto;background-position:right -15px top -29px}
+  .directory h2{font-size:34px}
+}
+
+/* Refinamientos de legibilidad tras pruebas en móvil y tamaños intermedios. */
+.header .official-mark,.footer-top .official-mark{
+  width:54px;height:54px;flex:0 0 54px;
+  background-color:#fff7ed;
+  background-image:url('./logo-jornada-2026.png');
+  background-size:89% 89%;
+  background-position:center center;
+  background-repeat:no-repeat;
+  border:1px solid #f0dac5;
+  border-radius:9px;
+  box-shadow:0 2px 8px #4c11200b;
+}
+.footer-top .official-mark{background-color:#fff8ef;border-color:#fff0e4}
+.motto-card:before{width:6px;height:100%;border-radius:0;background:#ab0e3b}
+.motto-card{border-radius:6px 58px 6px 6px}
+.motto-kicker{color:#941036}
+.motto-type,.motto-kicker{isolation:isolate}
+.motto-type>div small{margin-right:.16em}
+@media(min-width:701px) and (max-width:1100px){
+  .hero-grid{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr)}
+  .hero-motto{padding-left:8px}
+  .motto-card{min-height:420px;padding:27px 18px 18px}
+  .motto-type>span{font-size:clamp(31px,3.6vw,43px)}
+  .motto-type>div strong{font-size:clamp(32px,3.8vw,46px)}
+  .motto-type>small{font-size:25px}
+  .motto-type>div small{font-size:22px}
+  .motto-logo{width:105px;height:110px}
+  .motto-kicker{font-size:9px}
+}
+@media(max-width:700px){
+  .header .official-mark,.footer-top .official-mark{
+    width:46px;height:46px;flex-basis:46px;
+    background-size:89% 89%;background-position:center center;
+  }
+  .motto-card:before{width:5px}
+  .motto-card{padding-left:32px;padding-right:32px}
+  .motto-kicker{letter-spacing:.08em}
+}
+
+/* Referencias institucionales: jerarquía separada de las iniciativas comunitarias. */
+.official-resources{padding:82px 0 94px;background:#fffaf3;border-top:1px solid #f1e6dd}
+.resource-intro{display:grid;grid-template-columns:1.18fr .82fr;gap:70px;align-items:end;margin-bottom:37px}
+.resource-intro h2{font:400 clamp(30px,3.35vw,44px)/1.35 'Libre Baskerville',serif;letter-spacing:-.055em;margin:0}
+.resource-intro h2 em{color:#d78314}
+.resource-intro>p{color:#766a63;line-height:1.85;font-size:13px;margin:0}
+.resource-grid{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;overscroll-behavior-x:contain;padding:3px 1px 23px}
+.resource-grid::-webkit-scrollbar{display:none}
+.resource-card{flex:0 0 calc((100% - 40px)/3);scroll-snap-align:start}
+.resource-carousel-controls{display:flex;align-items:center;justify-content:space-between;margin-top:3px}
+.resource-carousel-count{font:700 12px 'DM Sans',sans-serif;letter-spacing:.16em;color:#9d7e70}
+.resource-carousel-buttons{display:flex;gap:10px}
+.resource-carousel-buttons button{width:43px;height:43px;border:1px solid #e2c9bb;border-radius:50%;color:#9a1738;background:#fffefa;cursor:pointer;font-size:21px;transition:background .2s,color .2s}
+.resource-carousel-buttons button:not(:disabled):hover{background:#9a1738;color:#fff}
+.resource-carousel-buttons button:disabled{opacity:.35;cursor:default}
+.resource-card{min-width:0;display:flex;flex-direction:column;background:#fffefa;border:1px solid #eadbd0;padding:26px;min-height:340px;box-shadow:0 9px 28px #521b2c08;border-top:3px solid #a40a33}
+.resource-number{display:flex;gap:15px;align-items:center;font:700 11px 'DM Sans',sans-serif;color:#cc7515;letter-spacing:.08em}
+.resource-number span{font-size:9px;letter-spacing:.1em;color:#a51b41}
+.resource-symbol{width:48px;height:48px;display:grid;place-items:center;background:#fff2e5;border-radius:50%;color:#af123d;font-size:27px;margin-top:27px}
+.resource-card h3{color:#49362f;font:400 20px/1.45 'Libre Baskerville',serif;letter-spacing:-.035em;margin:18px 0 10px}
+.resource-card p{color:#776c67;font-size:12px;line-height:1.85;margin:0 0 25px}
+.resource-card>a,.resource-links>a{color:#a50b33;font-size:12px;font-weight:700;border-bottom:1px solid #d9b6a0;padding-bottom:7px;width:max-content;max-width:100%}
+.resource-card>a{margin-top:auto}
+.resource-card a span{margin-left:6px}
+.resource-links{margin-top:auto;display:flex;gap:14px;flex-wrap:wrap}
+@media(max-width:850px){
+  .resource-intro{grid-template-columns:1fr;gap:16px}
+  .resource-card{flex-basis:calc((100% - 20px)/2)}
+}
+@media(max-width:620px){
+  .official-resources{padding:66px 0 72px}
+  .resource-card{flex-basis:100%}
+  .resource-card{min-height:0;padding:24px}
+  .resource-symbol{margin-top:20px}
+}
