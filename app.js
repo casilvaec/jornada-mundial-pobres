@@ -46,7 +46,7 @@ el('nav').querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
 if (CONFIG.submissionFormUrl) {
   const link = el('form-link');
   link.href = CONFIG.submissionFormUrl;
-  link.textContent = 'Enviar mi iniciativa ↗';
+  link.textContent = 'Enviar iniciativa ↗';
   link.classList.remove('disabled');
   link.removeAttribute('aria-disabled');
   link.target = '_blank';
@@ -167,6 +167,20 @@ function render() {
 ['q','country'].forEach(id => el(id).addEventListener('input', render));
 el('clear').addEventListener('click', () => {
   el('q').value = ''; el('country').value = ''; render();
+});
+el('share').addEventListener('click', async () => {
+  const button = el('share');
+  const original = 'Copiar enlace del directorio ↗';
+  const url = location.origin + location.pathname;
+  try {
+    await navigator.clipboard.writeText(url);
+    button.textContent = '¡Enlace copiado! ✓';
+  } catch {
+    window.prompt('Copia este enlace para compartir el directorio:', url);
+    button.textContent = original;
+    return;
+  }
+  window.setTimeout(() => { button.textContent = original; }, 3000);
 });
 async function load() {
   if (!CONFIG.approvedCsvUrl) { render(); return; }
