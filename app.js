@@ -2,6 +2,8 @@
 const CONFIG = { approvedCsvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQNfZl6CV_g9F4uw7fSeaJ5wuqs3RRQ8rfTk9CV7RBew5duFpZykZJ__dyiBuC6Jy3KVurxOtRJ_P9w/pub?gid=914710604&single=true&output=csv', submissionFormUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSd97Ji6c9tYx5qpkPZhH3ik6w8wsJsKnvWUoT8Gx2JJooeLkA/viewform?usp=pp_url&entry.1178173860=Jornada+Mundial+de+los+Pobres+2026' };
 const el = id => document.getElementById(id);
 let records = [];
+const PAGE_SIZE = 12;
+let currentPage = 1;
 
 // Carrusel de materiales: conserva el orden editorial y permite desplazarse
 // con flechas, gestos táctiles, trackpad o teclado.
@@ -147,12 +149,47 @@ function makeCard(item) {
   });
   body.append(links); article.append(body); return article;
 }
+function pageButton(label, page, options = {}) {
+  const button = node('button', 'page-button' + (options.current ? ' is-current' : ''), label);
+  button.type = 'button';
+  button.disabled = Boolean(options.disabled);
+  button.setAttribute('aria-label', options.ariaLabel || `Página ${page}`);
+  if (options.current) button.setAttribute('aria-current', 'page');
+  button.addEventListener('click', () => {
+    currentPage = page;
+    render();
+    el('pagination').scrollIntoView({block:'nearest', behavior:'smooth'});
+  });
+  return button;
+}
+function renderPagination(total) {
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const pagination = el('pagination');
+  pagination.hidden = totalPages <= 1;
+  if (totalPages <= 1) return;
+  const first = (currentPage - 1) * PAGE_SIZE + 1;
+  const last = Math.min(currentPage * PAGE_SIZE, total);
+  el('page-summary').textContent = `Mostrando ${first}–${last} de ${total} iniciativas`;
+  const controls = el('page-controls');
+  controls.replaceChildren(pageButton('←', currentPage - 1, {disabled:currentPage === 1, ariaLabel:'Página anterior'}));
+  const pages = new Set([1, totalPages, currentPage - 1, currentPage, currentPage + 1]);
+  let previous = 0;
+  [...pages].filter(n => n >= 1 && n <= totalPages).sort((a,b) => a-b).forEach(page => {
+    if (page - previous > 1) controls.append(node('span', 'page-ellipsis', '…'));
+    controls.append(pageButton(String(page), page, {current:page === currentPage}));
+    previous = page;
+  });
+  controls.append(pageButton('→', currentPage + 1, {disabled:currentPage === totalPages, ariaLabel:'Página siguiente'}));
+}
 function render() {
   const query = el('q').value.trim().toLocaleLowerCase();
   const country = el('country').value;
   const subset = records.filter(r => (!country || r.pais === country) &&
     (!query || [r.pais,r.ciudad,r.organizacion,r.titulo,r.descripcion].join(' ').toLocaleLowerCase().includes(query)));
-  el('cards').replaceChildren(...subset.map(makeCard));
+  currentPage = Math.min(currentPage, Math.max(1, Math.ceil(subset.length / PAGE_SIZE)));
+  const offset = (currentPage - 1) * PAGE_SIZE;
+  el('cards').replaceChildren(...subset.slice(offset, offset + PAGE_SIZE).map(makeCard));
+  renderPagination(subset.length);
   el('cards').hidden = !subset.length;
   el('empty').hidden = !records.length || !!subset.length;
   if (!subset.length && records.length) {
@@ -164,9 +201,9 @@ function render() {
   el('latest').hidden = !records.length;
   el('latest-cards').replaceChildren(...records.slice(0, 6).map(makeCard));
 }
-['q','country'].forEach(id => el(id).addEventListener('input', render));
+['q','country'].forEach(id => el(id).addEventListener('input', () => {currentPage = 1; render();}));
 el('clear').addEventListener('click', () => {
-  el('q').value = ''; el('country').value = ''; render();
+  el('q').value = ''; el('country').value = ''; currentPage = 1; render();
 });
 el('share').addEventListener('click', async () => {
   const button = el('share');

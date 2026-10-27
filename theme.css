@@ -225,7 +225,17 @@ footer{background:#780c2c}
 .card-cover .cover-info{padding-right:40px}
 .card-cover.cover-youtube img{position:absolute;inset:0}
 .card-cover .play-badge{z-index:2}
+.directory-pagination{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;margin:30px 0 0;padding:18px 0;border-top:1px solid #eedfd4}
+.directory-pagination[hidden]{display:none}
+.page-summary{font-size:12px;color:#876b64}
+.page-controls{display:flex;justify-content:center;align-items:center;gap:7px;flex-wrap:wrap}
+.page-button{display:grid;place-items:center;min-width:38px;height:38px;padding:0 10px;border-radius:9px;border:1px solid #ecd2c5;background:#fffefa;color:#921037;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s}
+.page-button:hover:not(:disabled),.page-button:focus-visible{border-color:#a40a33;background:#fff1e8}
+.page-button.is-current{color:#fff;background:#a40a33;border-color:#a40a33;cursor:default}
+.page-button:disabled{opacity:.35;cursor:not-allowed}
+.page-ellipsis{color:#8b6b63;padding:0 3px}
 @media(max-width:700px){
+  .directory-pagination{flex-direction:column;align-items:stretch;text-align:center}
   .latest-section{padding:64px 0}
   .latest-head{align-items:start;flex-direction:column;gap:16px}
   .resource-carousel-controls{flex-wrap:wrap;gap:15px}
