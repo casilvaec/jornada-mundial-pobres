@@ -197,6 +197,8 @@ footer{background:#780c2c}
 .resource-card{border-radius:13px;overflow:hidden;box-shadow:0 12px 26px #4a16200e;transition:box-shadow .2s,transform .2s}
 .resource-card:hover{box-shadow:0 17px 33px #4a16201b;transform:translateY(-2px)}
 .card{border-radius:13px;box-shadow:0 10px 25px #4a16200e;background:#fffefa}
+.copy-link{background:none;border:0;border-bottom:1px solid #9aab9f;padding:0 0 7px;cursor:pointer;color:inherit;text-align:left}
+.copy-link:hover,.copy-link:focus-visible{color:#a40a33;border-color:#a40a33}
 @media(max-width:700px){
   .latest-section{padding:64px 0}
   .latest-head{align-items:start;flex-direction:column;gap:16px}

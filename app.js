@@ -155,8 +155,21 @@ function render() {
 el('clear').addEventListener('click', () => {
   el('q').value = ''; el('country').value = ''; render();
 });
-el('share').href = 'mailto:?subject=' + encodeURIComponent('Directorio de la Jornada Mundial de los Pobres') +
-  '&body=' + encodeURIComponent('Te comparto este directorio de iniciativas: ' + location.href);
+el('share').addEventListener('click', async () => {
+  const button = el('share');
+  const original = 'Copiar enlace del directorio ↗';
+  const url = location.origin + location.pathname;
+  try {
+    await navigator.clipboard.writeText(url);
+    button.textContent = '¡Enlace copiado! ✓';
+  } catch {
+    // If clipboard access is denied, let the visitor select and copy the URL.
+    window.prompt('Copia este enlace para compartir el directorio:', url);
+    button.textContent = original;
+    return;
+  }
+  window.setTimeout(() => { button.textContent = original; }, 3000);
+});
 async function load() {
   if (!CONFIG.approvedCsvUrl) { render(); return; }
   try {
