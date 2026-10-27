@@ -185,9 +185,22 @@ footer{background:#780c2c}
 .card .platform-link{background:#fff4e8;border:1px solid #ead6c3;padding:8px 11px;margin-top:0;color:#8b1a38;border-radius:4px;font-size:11px}
 .card .platform-link:hover{background:#f8e1cf}
 .card-cover img{display:block}
+/* Ajustes de contraste, radios y jerarquía visual. */
+.form-card{border-radius:18px;box-shadow:0 24px 56px #49041925}
+.form-card-art{height:108px;justify-content:center}
+.form-card-art-label{position:relative;bottom:auto;left:auto;right:auto;z-index:1;background:#fff7edee;padding:12px 20px;border-radius:30px;color:#821236;font-size:11px;letter-spacing:.035em;text-align:center}
+.form-card-art:before{width:160px;height:160px}
+.form-card-art:after{width:145px;height:145px}
+.form-card .participate-benefits li{color:#483b37!important;font-size:13px;font-weight:600}
+.form-card .participate-benefits li:before{color:#ae123f}
+.form-card small{font-size:12px;color:#6d4e4f;font-weight:600;line-height:1.55}
+.resource-card{border-radius:13px;overflow:hidden;box-shadow:0 12px 26px #4a16200e;transition:box-shadow .2s,transform .2s}
+.resource-card:hover{box-shadow:0 17px 33px #4a16201b;transform:translateY(-2px)}
+.card{border-radius:13px;box-shadow:0 10px 25px #4a16200e;background:#fffefa}
 @media(max-width:700px){
   .latest-section{padding:64px 0}
   .latest-head{align-items:start;flex-direction:column;gap:16px}
   .resource-carousel-controls{flex-wrap:wrap;gap:15px}
   .resource-all-link{order:3;margin-left:0;width:100%;text-align:center}
+  .form-card-art{height:98px}
 }
