@@ -1,6 +1,5 @@
-// Connect these values only after creating the Google Form and a separate,
-// approved-only public sheet. Never publish the raw form responses.
-const CONFIG = { approvedCsvUrl: '', submissionFormUrl: '' };
+// This CSV exposes approved content only; raw Google Forms responses stay private.
+const CONFIG = { approvedCsvUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQNfZl6CV_g9F4uw7fSeaJ5wuqs3RRQ8rfTk9CV7RBew5duFpZykZJ__dyiBuC6Jy3KVurxOtRJ_P9w/pub?gid=914710604&single=true&output=csv', submissionFormUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSd97Ji6c9tYx5qpkPZhH3ik6w8wsJsKnvWUoT8Gx2JJooeLkA/viewform?usp=pp_url&entry.1178173860=Jornada+Mundial+de+los+Pobres+2026' };
 const el = id => document.getElementById(id);
 let records = [];
 
@@ -52,10 +51,6 @@ if (CONFIG.submissionFormUrl) {
   link.removeAttribute('aria-disabled');
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
-  const report = el('report-link');
-  report.href = CONFIG.submissionFormUrl;
-  report.target = '_blank';
-  report.rel = 'noopener noreferrer';
 } else el('form-link').addEventListener('click', e => e.preventDefault());
 
 function parseCSV(csv) {
@@ -92,9 +87,32 @@ function node(tag, cls, value) {
   if (value !== undefined) n.textContent = value;
   return n;
 }
+function approvedLinks(item) {
+  const seen = new Set();
+  return ['enlace1','enlace2','enlace3','enlace4','enlace5'].map(key => safeURL(item[key])).filter(url => {
+    if (!url || seen.has(url)) return false;
+    seen.add(url);
+    return true;
+  });
+}
+function sourceInfo(url) {
+  const parsed = new URL(url);
+  const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
+  if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtu.be') {
+    const id = host === 'youtu.be' ? parsed.pathname.slice(1) : parsed.searchParams.get('v');
+    return { label:'YouTube', videoId: /^[\w-]{11}$/.test(id || '') ? id : '' };
+  }
+  if (host === 'instagram.com') return {label:'Instagram'};
+  if (host === 'facebook.com' || host === 'fb.watch' || host === 'm.facebook.com') return {label:'Facebook'};
+  if (host === 'tiktok.com' || host.endsWith('.tiktok.com')) return {label:'TikTok'};
+  if (parsed.pathname.toLowerCase().endsWith('.pdf')) return {label:'PDF'};
+  return {label:'Sitio original'};
+}
 function makeCard(item) {
   const article = node('article', 'card'), cover = node('div', 'card-cover');
-  const image = safeURL(item.imagen, true);
+  const sources = approvedLinks(item);
+  const video = sources.map(sourceInfo).find(info => info.videoId);
+  const image = video ? `https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg` : '';
   if (image) {
     const img = node('img');
     img.src = image; img.alt = 'Portada: ' + item.titulo; img.loading = 'lazy';
@@ -104,50 +122,38 @@ function makeCard(item) {
   cover.append(node('span', 'country-badge', item.pais));
   article.append(cover);
   const body = node('div', 'card-body');
-  body.append(node('span', 'card-type', item.tipo || 'Iniciativa'));
+  body.append(node('span', 'card-type', 'Iniciativa compartida'));
   body.append(node('h4', '', item.titulo));
   if (item.descripcion) body.append(node('p', '', item.descripcion));
   body.append(node('span', 'card-org', [item.organizacion,item.ciudad].filter(Boolean).join(' · ')));
-  const platforms = [
-    ['facebook','Facebook'],['instagram','Instagram'],['tiktok','TikTok'],
-    ['youtube','YouTube'],['web','Web oficial'],['pdf','PDF']
-  ];
   const links = node('div', 'platform-links');
-  const knownURLs = new Set();
-  platforms.forEach(([key,label]) => {
-    const url = safeURL(item[key]);
-    if (!url || knownURLs.has(url)) return;
-    knownURLs.add(url);
-    const link = node('a', 'platform-link', label + ' ↗');
+  sources.forEach(url => {
+    const link = node('a', 'platform-link', sourceInfo(url).label + ' ↗');
     link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer';
     links.append(link);
   });
-  const primary = safeURL(item.enlace);
-  if (primary && !knownURLs.has(primary)) {
-    const link = node('a', 'platform-link', links.childElementCount ? 'Otra fuente ↗' : 'Ver fuente original ↗');
-    link.href = primary; link.target = '_blank'; link.rel = 'noopener noreferrer';
-    links.append(link);
-  }
   body.append(links); article.append(body); return article;
 }
 function render() {
   const query = el('q').value.trim().toLocaleLowerCase();
-  const country = el('country').value, type = el('type').value;
-  const subset = records.filter(r => (!country || r.pais === country) && (!type || r.tipo === type) &&
-    (!query || [r.pais,r.ciudad,r.organizacion,r.titulo,r.descripcion,r.tipo].join(' ').toLocaleLowerCase().includes(query)));
+  const country = el('country').value;
+  const subset = records.filter(r => (!country || r.pais === country) &&
+    (!query || [r.pais,r.ciudad,r.organizacion,r.titulo,r.descripcion].join(' ').toLocaleLowerCase().includes(query)));
   el('cards').replaceChildren(...subset.map(makeCard));
   el('cards').hidden = !subset.length;
   el('empty').hidden = !records.length || !!subset.length;
   if (!subset.length && records.length) {
     el('empty').querySelector('h3').textContent = 'No encontramos coincidencias.';
-    el('empty').querySelector('p').textContent = 'Prueba con otro país, tipo de contenido o término de búsqueda.';
+    el('empty').querySelector('p').textContent = 'Prueba con otro país, ciudad, organización o término de búsqueda.';
   }
   el('result-count').textContent = records.length ? subset.length + (subset.length === 1 ? ' resultado' : ' resultados') : '';
   document.querySelector('.results-head').hidden = !records.length;
+  el('latest').hidden = !records.length;
+  el('latest-cards').replaceChildren(...records.slice(0, 6).map(makeCard));
 }
-['q','country','type'].forEach(id => el(id).addEventListener('input', render));
+['q','country'].forEach(id => el(id).addEventListener('input', render));
 el('clear').addEventListener('click', () => {
-  el('q').value = ''; el('country').value = ''; el('type').value = ''; render();
+  el('q').value = ''; el('country').value = ''; render();
 });
 el('share').href = 'mailto:?subject=' + encodeURIComponent('Directorio de la Jornada Mundial de los Pobres') +
   '&body=' + encodeURIComponent('Te comparto este directorio de iniciativas: ' + location.href);
@@ -156,9 +162,8 @@ async function load() {
   try {
     const response = await fetch(CONFIG.approvedCsvUrl);
     if (!response.ok) throw new Error('No se pudo consultar la hoja');
-    records = parseCSV(await response.text()).filter(r => (safeURL(r.enlace) || ['facebook','instagram','tiktok','youtube','web','pdf'].some(k => safeURL(r[k]))) && r.titulo && r.pais &&
-      (!r.estado || r.estado.toLocaleLowerCase() === 'aprobado'));
-    records.sort((a,b) => (b.fecha_publicacion || '').localeCompare(a.fecha_publicacion || ''));
+    records = parseCSV(await response.text()).filter(r => approvedLinks(r).length && r.titulo && r.pais);
+    records.sort((a,b) => Number((b.id || '').split('-').pop()) - Number((a.id || '').split('-').pop()));
     const countries = [...new Set(records.map(r => r.pais))].sort((a,b) => a.localeCompare(b, 'es'));
     countries.forEach(c => { const opt = node('option', '', c); opt.value = c; el('country').append(opt); });
     render();

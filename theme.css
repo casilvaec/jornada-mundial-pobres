@@ -144,3 +144,23 @@ footer{background:#780c2c}
   .resource-card{min-height:0;padding:24px}
   .resource-symbol{margin-top:20px}
 }
+
+/* Publicaciones aprobadas: portada reciente y fuentes originales. */
+[hidden]{display:none!important}
+.latest-section{padding:83px 0 90px;background:#fff7ef}
+.latest-head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:30px}
+.latest-head h2{font:400 clamp(30px,3.5vw,46px)/1.3 'Libre Baskerville',serif;letter-spacing:-.05em;margin:0 0 13px}
+.latest-head h2 em{color:#c86b14}
+.latest-head p:not(.eyebrow){color:#776b63;line-height:1.8;font-size:13px;margin:0}
+.latest-all,.resource-all-link{font-size:12px;font-weight:700;color:#a10a35;border-bottom:1px solid #dcbda6;padding-bottom:6px;white-space:nowrap}
+.resource-all-link{margin-left:auto}
+.platform-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+.card .platform-link{background:#fff4e8;border:1px solid #ead6c3;padding:8px 11px;margin-top:0;color:#8b1a38;border-radius:4px;font-size:11px}
+.card .platform-link:hover{background:#f8e1cf}
+.card-cover img{display:block}
+@media(max-width:700px){
+  .latest-section{padding:64px 0}
+  .latest-head{align-items:start;flex-direction:column;gap:16px}
+  .resource-carousel-controls{flex-wrap:wrap;gap:15px}
+  .resource-all-link{order:3;margin-left:0;width:100%;text-align:center}
+}
