@@ -112,13 +112,26 @@ function makeCard(item) {
   const article = node('article', 'card'), cover = node('div', 'card-cover');
   const sources = approvedLinks(item);
   const video = sources.map(sourceInfo).find(info => info.videoId);
-  const image = video ? `https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg` : '';
-  if (image) {
+  const mainSource = sources[0];
+  const host = new URL(mainSource).hostname.replace(/^www\./, '');
+  const info = sourceInfo(mainSource);
+  const isDocument = sources.some(url => sourceInfo(url).label === 'PDF');
+  cover.classList.add('resource-cover', video ? 'cover-youtube' : isDocument ? 'cover-document' : 'cover-institution');
+  if (video) {
     const img = node('img');
-    img.src = image; img.alt = 'Portada: ' + item.titulo; img.loading = 'lazy';
-    img.onerror = () => { img.remove(); cover.prepend(node('span', '', '✳')); };
+    img.src = `https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg`;
+    img.alt = 'Miniatura de ' + item.titulo; img.loading = 'lazy';
+    img.onerror = () => { img.remove(); cover.classList.remove('cover-youtube'); cover.classList.add('cover-institution'); appendCoverFallback(); };
     cover.append(img);
-  } else cover.append(node('span', '', '✳'));
+    cover.append(node('span', 'play-badge', '▶'));
+  } else appendCoverFallback();
+  function appendCoverFallback() {
+    cover.append(node('span', 'cover-symbol', isDocument ? '▤' : info.label === 'Instagram' || info.label === 'Facebook' || info.label === 'TikTok' ? '◉' : '◎'));
+    const copy = node('span', 'cover-info');
+    copy.append(node('b', '', isDocument ? 'DOCUMENTO PDF' : info.label === 'Sitio original' ? 'PUBLICACIÓN WEB' : info.label.toUpperCase()));
+    copy.append(node('small', '', host));
+    cover.append(copy);
+  }
   cover.append(node('span', 'country-badge', item.pais));
   article.append(cover);
   const body = node('div', 'card-body');

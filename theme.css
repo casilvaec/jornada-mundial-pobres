@@ -201,10 +201,33 @@ footer{background:#780c2c}
 .resource-video-preview img{width:100%;height:100%;object-fit:cover;display:block}
 .resource-video-preview span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:48px;height:48px;border-radius:50%;color:#fff;background:#a40a33d9;font-size:18px;box-shadow:0 3px 14px #0005}
 .resource-card:has(.resource-video-preview) h3{margin-top:15px}
+/* Carátulas iguales para video, páginas y PDF: el carrusel no cambia de altura. */
+.resource-card{height:407px;min-height:0;padding:22px 23px 24px}
+.resource-card h3{font-size:19px;line-height:1.4;margin:16px 0 10px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.resource-card p{font-size:12px;line-height:1.65;margin-bottom:16px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.resource-card>a.resource-cover{display:flex;position:relative;margin:16px 0 0;padding:0;border:0;width:100%;max-width:100%}
+.resource-cover{height:116px;min-height:116px;position:relative;display:flex;align-items:center;gap:16px;overflow:hidden;width:100%;padding:15px 18px;border-radius:10px;border:1px solid #edd6c7;background:#fff2e7;color:#80243a}
+.resource-cover:after{content:'';width:155px;height:155px;border:1px solid #ffffff75;position:absolute;right:-64px;top:-90px;transform:rotate(24deg);border-radius:42px;pointer-events:none}
+.resource-cover.cover-vatican{background:linear-gradient(120deg,#90163c,#b83c58);color:#fff8ee;border-color:#9b3352}
+.resource-cover.cover-institution{background:linear-gradient(120deg,#f7ead8,#fff8ef);color:#8c2941}
+.resource-cover.cover-document{background:linear-gradient(120deg,#efd9bf,#faefe2);color:#8b2541}
+.cover-symbol{display:grid;place-items:center;flex:0 0 60px;width:60px;height:66px;font-size:35px;font-weight:400;background:#ffffff45;border:1px solid #ffffff8c;border-radius:8px}
+.cover-info{display:flex;flex-direction:column;gap:8px;min-width:0;z-index:1}
+.cover-info b{font-size:10px;line-height:1.4;letter-spacing:.1em}
+.cover-info small{font-size:11px;line-height:1.25;overflow-wrap:anywhere;opacity:.85}
+.resource-cover.cover-youtube{padding:0;border:0;background:#e5d2c5;display:block}
+.resource-cover.cover-youtube img{width:100%;height:100%;object-fit:cover;object-position:center 50%;display:block}
+.play-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:42px;height:42px;display:grid;place-items:center;background:#a40a33e8;color:#fff;border-radius:50%;font-size:16px;box-shadow:0 3px 12px #0004}
+.card-cover.resource-cover{height:136px;min-height:136px;border:0;border-radius:0;padding:18px 22px;justify-content:flex-start}
+.card-cover .country-badge{top:10px;left:auto;right:10px;border-radius:4px;z-index:3;box-shadow:0 2px 10px #0002}
+.card-cover .cover-info{padding-right:40px}
+.card-cover.cover-youtube img{position:absolute;inset:0}
+.card-cover .play-badge{z-index:2}
 @media(max-width:700px){
   .latest-section{padding:64px 0}
   .latest-head{align-items:start;flex-direction:column;gap:16px}
   .resource-carousel-controls{flex-wrap:wrap;gap:15px}
   .resource-all-link{order:3;margin-left:0;width:100%;text-align:center}
   .form-card-art{height:98px}
+  .resource-card{height:407px;padding:22px}
 }
