@@ -4,6 +4,46 @@ const el = id => document.getElementById(id);
 let records = [];
 const PAGE_SIZE = 12;
 let currentPage = 1;
+// País de procedencia del material, no el alcance de la Jornada.
+// Se consulta junto con las iniciativas solo cuando hay un filtro activo.
+const referenceItems = [
+  {
+    tipo: 'referencia', pais: 'Ciudad del Vaticano', ciudad: '', organizacion: 'La Santa Sede',
+    titulo: 'Mensaje del papa León XIV',
+    descripcion: 'Mensaje para la X Jornada Mundial de los Pobres, que se celebra el 15 de noviembre de 2026.',
+    enlace1: 'https://www.vatican.va/content/leo-xiv/es/messages/poor/documents/20260613-messaggio-giornata-poveri.html',
+    etiquetas: ['Leer el mensaje completo']
+  },
+  {
+    tipo: 'referencia', pais: 'Ciudad del Vaticano', ciudad: '', organizacion: 'Dicasterio para la Evangelización',
+    titulo: 'Mensajes del Papa para las jornadas anteriores',
+    descripcion: 'Archivo institucional con enlaces a materiales de ediciones anteriores de la Jornada.',
+    enlace1: 'https://www.evangelizatio.va/content/pcpne/es/attivita/gmdp.html',
+    etiquetas: ['Visitar la página']
+  },
+  {
+    tipo: 'referencia', pais: 'Italia', ciudad: 'Roma', organizacion: 'Frailes Menores Capuchinos',
+    titulo: 'Carta a los miembros de las familias franciscanas nacionales de todo el mundo',
+    descripcion: 'Una invitación franciscana a realizar acciones durante la semana del 9 al 15 de noviembre de 2026.',
+    enlace1: 'https://www.ofmcap.org/es/proposta-per-la-settimana-mondiale-dei-poveri-2026/',
+    enlace2: 'https://www.ofmcap.org/wp-content/uploads/2026/05/Lettera_FF_Settimana_Poveri_2026_ES.pdf',
+    etiquetas: ['Ver propuesta', 'PDF en español']
+  },
+  {
+    tipo: 'referencia', pais: 'México', ciudad: '', organizacion: 'Cáritas Mexicana',
+    titulo: 'Subsidio para la Jornada 2026',
+    descripcion: 'Subsidio pastoral en PDF compartido por Cáritas Mexicana para acompañar la preparación de la Jornada.',
+    enlace1: 'https://caritasmexicana.org/uploads/732/Subsidio%20para%20la%20JMP%202026.pdf',
+    etiquetas: ['Consultar el subsidio PDF']
+  },
+  {
+    tipo: 'referencia', pais: 'Ecuador', ciudad: 'Guayaquil', organizacion: 'Ideas Misioneras',
+    titulo: 'El Señor es el refugio del Pobre',
+    descripcion: 'Hay momentos en los que la Iglesia necesita volver a mirar lo esencial. No solamente preguntarse qué hace, sino también a quién mira, a quién escucha y a quiénes puede estar dejando al margen.',
+    enlace1: 'https://www.youtube.com/watch?v=zqv6dz5ZriE',
+    etiquetas: ['Ver video en YouTube']
+  }
+];
 
 // Carrusel de materiales: conserva el orden editorial y permite desplazarse
 // con flechas, gestos táctiles, trackpad o teclado.
@@ -112,6 +152,7 @@ function sourceInfo(url) {
 }
 function makeCard(item) {
   const article = node('article', 'card'), cover = node('div', 'card-cover');
+  const isReference = item.tipo === 'referencia';
   const sources = approvedLinks(item);
   const video = sources.map(sourceInfo).find(info => info.videoId);
   const mainSource = sources[0];
@@ -137,13 +178,14 @@ function makeCard(item) {
   cover.append(node('span', 'country-badge', item.pais));
   article.append(cover);
   const body = node('div', 'card-body');
-  body.append(node('span', 'card-type', 'Iniciativa compartida'));
+  body.append(node('span', 'card-type', isReference ? 'Material de referencia' : 'Iniciativa compartida'));
   body.append(node('h4', '', item.titulo));
   if (item.descripcion) body.append(node('p', '', item.descripcion));
   body.append(node('span', 'card-org', [item.organizacion,item.ciudad].filter(Boolean).join(' · ')));
   const links = node('div', 'platform-links');
-  sources.forEach(url => {
-    const link = node('a', 'platform-link', sourceInfo(url).label + ' ↗');
+  sources.forEach((url, index) => {
+    const label = isReference ? item.etiquetas[index] : sourceInfo(url).label;
+    const link = node('a', 'platform-link', label + ' ↗');
     link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer';
     links.append(link);
   });
@@ -169,7 +211,7 @@ function renderPagination(total) {
   if (totalPages <= 1) return;
   const first = (currentPage - 1) * PAGE_SIZE + 1;
   const last = Math.min(currentPage * PAGE_SIZE, total);
-  el('page-summary').textContent = `Mostrando ${first}–${last} de ${total} iniciativas`;
+  el('page-summary').textContent = `Mostrando ${first}–${last} de ${total} resultados`;
   const controls = el('page-controls');
   controls.replaceChildren(pageButton('←', currentPage - 1, {disabled:currentPage === 1, ariaLabel:'Página anterior'}));
   const pages = new Set([1, totalPages, currentPage - 1, currentPage, currentPage + 1]);
@@ -184,22 +226,22 @@ function renderPagination(total) {
 function render() {
   const query = el('q').value.trim().toLocaleLowerCase();
   const country = el('country').value;
-  const subset = records.filter(r => (!country || r.pais === country) &&
+  const hasFilter = Boolean(query || country);
+  const candidates = hasFilter ? [...records, ...referenceItems] : records;
+  const subset = candidates.filter(r => (!country || r.pais === country) &&
     (!query || [r.pais,r.ciudad,r.organizacion,r.titulo,r.descripcion].join(' ').toLocaleLowerCase().includes(query)));
   currentPage = Math.min(currentPage, Math.max(1, Math.ceil(subset.length / PAGE_SIZE)));
   const offset = (currentPage - 1) * PAGE_SIZE;
   el('cards').replaceChildren(...subset.slice(offset, offset + PAGE_SIZE).map(makeCard));
   renderPagination(subset.length);
   el('cards').hidden = !subset.length;
-  el('empty').hidden = !records.length || !!subset.length;
-  if (!subset.length && records.length) {
+  el('empty').hidden = !hasFilter && !records.length || !!subset.length;
+  if (!subset.length && (records.length || hasFilter)) {
     el('empty').querySelector('h3').textContent = 'No encontramos coincidencias.';
     el('empty').querySelector('p').textContent = 'Prueba con otro país, ciudad, organización o término de búsqueda.';
   }
-  el('result-count').textContent = records.length ? subset.length + (subset.length === 1 ? ' resultado' : ' resultados') : '';
-  document.querySelector('.results-head').hidden = !records.length;
-  el('latest').hidden = !records.length;
-  el('latest-cards').replaceChildren(...records.slice(0, 6).map(makeCard));
+  el('result-count').textContent = subset.length + (subset.length === 1 ? ' resultado' : ' resultados');
+  document.querySelector('.results-head').hidden = !records.length && !hasFilter;
 }
 ['q','country'].forEach(id => el(id).addEventListener('input', () => {currentPage = 1; render();}));
 el('clear').addEventListener('click', () => {
@@ -226,7 +268,7 @@ async function load() {
     if (!response.ok) throw new Error('No se pudo consultar la hoja');
     records = parseCSV(await response.text()).filter(r => approvedLinks(r).length && r.titulo && r.pais);
     records.sort((a,b) => Number((b.id || '').split('-').pop()) - Number((a.id || '').split('-').pop()));
-    const countries = [...new Set(records.map(r => r.pais))].sort((a,b) => a.localeCompare(b, 'es'));
+    const countries = [...new Set([...records, ...referenceItems].map(r => r.pais))].sort((a,b) => a.localeCompare(b, 'es'));
     countries.forEach(c => { const opt = node('option', '', c); opt.value = c; el('country').append(opt); });
     render();
   } catch {

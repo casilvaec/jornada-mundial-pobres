@@ -206,6 +206,7 @@ footer{background:#780c2c}
 /* Carátulas iguales para video, páginas y PDF: el carrusel no cambia de altura. */
 .resource-card{height:407px;min-height:0;padding:22px 23px 24px}
 .resource-card h3{font-size:19px;line-height:1.4;margin:16px 0 10px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.resource-card:nth-child(3) h3{font-size:15px;line-height:1.3;-webkit-line-clamp:4}
 .resource-card p{font-size:12px;line-height:1.65;margin-bottom:16px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
 .resource-card>a.resource-cover{display:flex;position:relative;margin:16px 0 0;padding:0;border:0;width:100%;max-width:100%}
 .resource-cover{height:116px;min-height:116px;position:relative;display:flex;align-items:center;gap:16px;overflow:hidden;width:100%;padding:15px 18px;border-radius:10px;border:1px solid #edd6c7;background:#fff2e7;color:#80243a}
